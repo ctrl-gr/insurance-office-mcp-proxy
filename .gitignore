@@ -8,13 +8,10 @@
 
 .mcp-inspector/
 
-# Visual Studio
 .vs/
 
-# .NET build output
 bin/
 obj/
 
-# Debug artifacts
 *.dll
 *.pdb
