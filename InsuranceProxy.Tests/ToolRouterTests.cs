@@ -21,21 +21,21 @@ public class ToolRouterTests
     [Fact]
     public void ExtractCompanyId_ValidNamespacedName_ReturnsCompanyId()
     {
-        var companyId = _router.ExtractCompanyId("thelion__get_quote");
+        var companyId = _router.ExtractCompanyId("thelion_get_quote");
         Assert.Equal("thelion", companyId);
     }
 
     [Fact]
     public void ExtractCompanyId_CompanyA_ReturnsCompanyA()
     {
-        var companyId = _router.ExtractCompanyId("companya__echo");
+        var companyId = _router.ExtractCompanyId("companya_echo");
         Assert.Equal("companya", companyId);
     }
 
     [Fact]
     public void ExtractCompanyId_NoPrefix_ThrowsArgumentException()
     {
-        Assert.Throws<ArgumentException>(() => _router.ExtractCompanyId("get_quote"));
+        Assert.Throws<ArgumentException>(() => _router.ExtractCompanyId("getquote"));
     }
 
     // ── GetAllToolsAsync ───────────────────────────────────
@@ -53,8 +53,8 @@ public class ToolRouterTests
     public async Task GetAllTools_ClientThrows_SkipsCompanyAndContinues()
     {
         _registry.GetActiveCompanies().Returns(new List<string> { "thelion", "companya" });
-        _registry.GetClient("thelion").Throws(new Exception("Server unreachable"));
-        _registry.GetClient("companya").Throws(new Exception("Server unreachable"));
+        _registry.GetOrReconnectAsync("thelion", Arg.Any<CancellationToken>()).Throws(new Exception("Server unreachable"));
+        _registry.GetOrReconnectAsync("companya", Arg.Any<CancellationToken>()).Throws(new Exception("Server unreachable"));
 
         // Should not throw — just return empty
         var tools = await _router.GetAllToolsAsync();
@@ -65,11 +65,11 @@ public class ToolRouterTests
     [Fact]
     public async Task RouteToolCall_UnknownCompany_ThrowsKeyNotFoundException()
     {
-        _registry.GetClient("unknown").Throws(new KeyNotFoundException("No client for 'unknown'"));
+        _registry.GetOrReconnectAsync("unknown", Arg.Any<CancellationToken>()).Throws(new KeyNotFoundException("No client for 'unknown'"));
 
         await Assert.ThrowsAsync<KeyNotFoundException>(
             () => _router.RouteToolCallAsync(
-                "unknown__get_quote",
+                "unknown_get_quote",
                 new Dictionary<string, object?>(),
                 CancellationToken.None));
     }
@@ -78,7 +78,7 @@ public class ToolRouterTests
     {
         await Assert.ThrowsAsync<ArgumentException>(
             () => _router.RouteToolCallAsync(
-                "get_quote",
+                "getquote",
                 new Dictionary<string, object?>(),
                 CancellationToken.None));
     }
