@@ -2,7 +2,7 @@ namespace InsuranceProxy.Services;
 
 public static class ToolNamespace
 {
-    private const string Separator = "__";
+    private const string Separator = "_";
 
     public static string Build(string companyId, string toolName)
         => $"{companyId.ToLower()}{Separator}{toolName}";
