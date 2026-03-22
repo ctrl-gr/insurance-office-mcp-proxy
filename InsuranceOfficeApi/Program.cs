@@ -182,3 +182,5 @@ public record ConversationRequest(string Message, List<ConversationMessage> Hist
 public record CompanyToolInfo(
     [property: JsonPropertyName("Name")] string Name,
     [property: JsonPropertyName("Description")] string? Description);
+
+public partial class Program { }
