@@ -32,7 +32,7 @@ builder.Services.AddSingleton<IToolRouter, ToolRouter>();
 builder.Services
     .AddMcpServer()
     .WithHttpTransport()
-    .WithTools<ProxyTool>();
+    .WithToolsFromAssembly();
 
 var app = builder.Build();
 
