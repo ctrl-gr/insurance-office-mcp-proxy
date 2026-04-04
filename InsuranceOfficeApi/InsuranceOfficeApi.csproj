@@ -17,4 +17,13 @@
     <InternalsVisibleTo Include="InsuranceOfficeApi.Tests" />
   </ItemGroup>
 
+  <ItemGroup>
+    <None Update="Schemas\quoteSchema.json">
+      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+    </None>
+    <None Update="Schemas\coverageSchema.json">
+      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+    </None>
+  </ItemGroup>
+
 </Project>
