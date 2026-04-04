@@ -33,9 +33,11 @@ async Task<McpClient> CreateProxyClient()
 
 var quoteSchemaJson = SchemaLoader.LoadSchemaFile("quoteSchema.json");
 var coverageSchemaJson = SchemaLoader.LoadSchemaFile("coverageSchema.json");
+var purchaseSchemaJson = SchemaLoader.LoadSchemaFile("purchaseSchema.json");
 
 var quoteSchema = BinaryData.FromString(quoteSchemaJson);
 var coverageSchema = BinaryData.FromString(coverageSchemaJson);
+var purchaseSchema = BinaryData.FromString(purchaseSchemaJson);
 
 async Task<List<CompanyToolInfo>> GetCompanyTools(McpClient client)
 {
@@ -79,7 +81,10 @@ app.MapPost("/api/chat", async (ConversationRequest request) =>
 
     foreach (var t in companyTools)
     {
-        var schema = t.Name.Contains("get_quote") ? quoteSchema : coverageSchema;
+        var schema = t.Name.Contains("get_quote") ? quoteSchema
+                    : t.Name.Contains("purchase") ? purchaseSchema
+                    : coverageSchema;
+
         openAiTools.Add(ChatTool.CreateFunctionTool(t.Name, t.Description ?? string.Empty, schema));
         nameMap[t.Name] = t.Name;
     }
