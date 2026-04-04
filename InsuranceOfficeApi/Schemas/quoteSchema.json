@@ -1,0 +1,9 @@
+{
+  "type": "object",
+  "properties": {
+    "clientAge": { "type": "integer", "description": "Client age (18-99)" },
+    "coverageType": { "type": "string", "description": "Coverage type: auto | home | life" },
+    "assetValue": { "type": "number", "description": "Asset value in EUR" }
+  },
+  "required": ["clientAge", "coverageType", "assetValue"]
+}

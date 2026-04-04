@@ -4,6 +4,7 @@ using OpenAI;
 using OpenAI.Chat;
 using System.Text.Json;
 using System.Text.Json.Serialization;
+using InsuranceOfficeApi.Schemas;
 
 var builder = WebApplication.CreateBuilder(args);
 
@@ -30,27 +31,11 @@ async Task<McpClient> CreateProxyClient()
     return await McpClient.CreateAsync(transport);
 }
 
-var quoteSchema = BinaryData.FromString("""
-    {
-        "type": "object",
-        "properties": {
-            "clientAge": { "type": "integer", "description": "Client age (18-99)" },
-            "coverageType": { "type": "string", "description": "Coverage type: auto | home | life" },
-            "assetValue": { "type": "number", "description": "Asset value in EUR" }
-        },
-        "required": ["clientAge", "coverageType", "assetValue"]
-    }
-    """);
+var quoteSchemaJson = SchemaLoader.LoadSchemaFile("quoteSchema.json");
+var coverageSchemaJson = SchemaLoader.LoadSchemaFile("coverageSchema.json");
 
-var coverageSchema = BinaryData.FromString("""
-    {
-        "type": "object",
-        "properties": {
-            "coverageType": { "type": "string", "description": "Coverage type: auto | home | life" }
-        },
-        "required": ["coverageType"]
-    }
-    """);
+var quoteSchema = BinaryData.FromString(quoteSchemaJson);
+var coverageSchema = BinaryData.FromString(coverageSchemaJson);
 
 async Task<List<CompanyToolInfo>> GetCompanyTools(McpClient client)
 {

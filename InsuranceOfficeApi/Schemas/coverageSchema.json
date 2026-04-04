@@ -1,0 +1,7 @@
+{
+  "type": "object",
+  "properties": {
+    "coverageType": { "type": "string", "description": "Coverage type: auto | home | life" }
+  },
+  "required": ["coverageType"]
+}
